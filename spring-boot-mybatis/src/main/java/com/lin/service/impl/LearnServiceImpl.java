@@ -38,7 +38,7 @@ public class LearnServiceImpl implements LearnService {
     @Override
     public List<LearnResouce> queryLearnResourceList(Map<String, Object> params) {
         PageHelper.startPage(Integer.parseInt(params.get("page").toString()),
-                Integer.parseInt(params.get("size").toString()));
+                Integer.parseInt(params.get("rows").toString()));
         return this.learnResourceMapper.queryLearnResourceList(params);
     }
 }

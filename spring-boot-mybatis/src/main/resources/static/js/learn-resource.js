@@ -12,7 +12,7 @@ $(function(){
     });
 
     $(grid_selector).jqGrid({
-        url:"learn/queryLeanList",
+        url:"learn/queryLearnList",
         datatype: "json",
         mtype: 'POST',
         height:window.screen.height-550,

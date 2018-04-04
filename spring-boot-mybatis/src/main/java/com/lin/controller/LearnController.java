@@ -45,7 +45,7 @@ public class LearnController {
 
         Map<String, Object> params = new HashMap<>();
         params.put("page", page);
-        params.put("size", size);
+        params.put("rows", size);
         params.put("author", author);
         params.put("title", title);
         List<LearnResouce> learnResouceList = learnService.queryLearnResourceList(params);
@@ -97,7 +97,62 @@ public class LearnController {
             result.put("flag", false);
         }
         ServletUtil.createSuccessResponse(200, result, response);
+    }
 
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public void updateLearn(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        LearnResouce learnResouce = learnService.queryLearnResouceById(Long.parseLong(id));
 
+        JSONObject result = new JSONObject();
+        String author = request.getParameter("author");
+        String title = request.getParameter("title");
+        String url = request.getParameter("url");
+        if (StringUtils.isBlank(author)) {
+            result.put("message", "作者不能空");
+            result.put("flag", false);
+            ServletUtil.createSuccessResponse(200, result, response);
+            return;
+        }
+        if (StringUtils.isBlank(title)) {
+            result.put("message", "标题不能空");
+            result.put("flag", false);
+            ServletUtil.createSuccessResponse(200, result, response);
+            return;
+        }
+        if (StringUtils.isBlank(url)) {
+            result.put("message", "链接不能空");
+            result.put("flag", false);
+            ServletUtil.createSuccessResponse(200, result, response);
+            return;
+        }
+
+        learnResouce.setAuthor(author);
+        learnResouce.setTitle(title);
+        learnResouce.setUrl(url);
+        int index = learnService.update(learnResouce);
+        if (index > 0) {
+            result.put("message", "教程修改成功");
+            result.put("flag", true);
+        }else {
+            result.put("message", "教程修改成功");
+            result.put("flag", false);
+        }
+        ServletUtil.createSuccessResponse(200, result, response);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public void deleteLearn(HttpServletRequest request, HttpServletResponse response) {
+        String ids = request.getParameter("ids");
+        JSONObject jsonObject = new JSONObject();
+        int index = learnService.deleteByIds(ids.split(","));
+        if (index > 0) {
+            jsonObject.put("message", "删除教程信息成功");
+            jsonObject.put("flag", true);
+        }else {
+            jsonObject.put("message", "删除教程信息失败");
+            jsonObject.put("flag", false);
+        }
+        ServletUtil.createSuccessResponse(200, jsonObject, response);
     }
 }

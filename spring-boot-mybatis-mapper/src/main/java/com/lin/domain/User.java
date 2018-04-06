@@ -1,30 +1,56 @@
 package com.lin.domain;
 
-/**
- * Created by tengj on 2017/3/29.
- */
+import javax.persistence.*;
+
+@Table(name = "user")
 public class User {
-    private String userName;
-    private String passWord;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    public User(String userName, String passWord) {
-        this.userName = userName;
-        this.passWord = passWord;
+    private String name;
+
+    private String password;
+
+    /**
+     * @return id
+     */
+    public Integer getId() {
+        return id;
     }
 
-    public String getUserName() {
-        return userName;
+    /**
+     * @param id
+     */
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    /**
+     * @return name
+     */
+    public String getName() {
+        return name;
     }
 
-    public String getPassWord() {
-        return passWord;
+    /**
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    /**
+     * @return password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password
+     */
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
     }
 }

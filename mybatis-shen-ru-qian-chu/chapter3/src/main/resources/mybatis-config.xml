@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="logImpl" value="SLF4J"/>
+    </settings>
+    
+    <!--定义别名-->
+    <typeAliases>
+        <typeAlias type="com.lin.chapter3.po.Role" alias="role" />
+    </typeAliases>
+
+    <!-- 定义TypeHandler类型处理器 -->
+    <typeHandlers>
+        <typeHandler handler="com.lin.chapter3.typehandler.MyStringTypeHandler"
+                     javaType="string" jdbcType="VARCHAR" />
+    </typeHandlers>
+
+    <!--定义数据库信息，默认使用development数据库构建环境-->
+    <environments default="development">
+        <environment id="development">
+            <!--采用jdbc事务-->
+            <transactionManager type="JDBC"/>
+            <!-- 配置数据链接信息 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://host:3306/mybatis" />
+                <property name="username" value="username" />
+                <property name="password" value="password" />
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="mapper/roleMapper.xml" />
+    </mappers>
+</configuration>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.chapter3.mapper.RoleMapper">
+    <resultMap id="roleMap" type="role">
+        <!-- 定义结果类型转化器标示，才能使用类型转换器 -->
+        <!-- 标示哪些参数或结果类型去用TypeHandler进行转换 -->
+        <!-- 配置jdbcType和javaType -->
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT" />
+        <result column="role_name" property="roleName" javaType="string" jdbcType="VARCHAR" />
+        <!-- 直接使用typeHandler属性指定 -->
+        <result column="note" property="note"
+                typeHandler="com.lin.chapter3.typehandler.MyStringTypeHandler" />
+    </resultMap>
+
+    <!--<select id="getRole" parameterType="long" resultType="role">
+        SELECT id,role_name as roleName, note FROM t_role WHERE id = #{id}
+    </select>-->
+
+    <insert id="insertRole" parameterType="role">
+        INSERT INTO t_role(role_name, note) VALUES(#{roleName}, #{note})
+    </insert>
+    <delete id="deleteRole" parameterType="long" >
+        DELETE FROM t_role WHERE id = #{id}
+    </delete>
+
+    <!-- 定义TypeHandler，使用resultMap -->
+    <select id="getRole" parameterType="long" resultMap="roleMap">
+        SELECT id,role_name as roleName, note FROM t_role WHERE id = #{id}
+    </select>
+    <select id="findRole" parameterType="string" resultMap="roleMap" >
+        SELECT id, role_name, note FROM t_role WHERE role_name like concat('%',
+        #{roleName javaType=string, jdbcType=VARCHAR,
+          typeHandler=com.lin.chapter3.typehandler.MyStringTypeHandler},
+        '%')
+    </select>
+</mapper>

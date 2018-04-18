@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.chapter3.mapper.UserMapper">
+    <resultMap id="userMap" type="com.lin.chapter3.po.User">
+        <id column="id" property="id" javaType="long" jdbcType="BIGINT" />
+        <result column="user_name" property="userName" />
+        <result column="cnname" property="cnname" />
+        <result column="birthday" property="birthday" />
+        <!-- 使用枚举类型转换器 -->
+        <result column="sex" property="sex"
+                typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+        <result column="email" property="email" />
+        <result column="mobile" property="mobile" />
+        <result column="note" property="note" />
+    </resultMap>
+
+    <select id="getUser" parameterType="long" resultMap="userMap">
+        SELECT id, user_name, cnname, birthday, sex, email, mobile, note
+        FROM t_user WHERE id = #{id}
+    </select>
+
+    <insert id="insertUser" parameterType="com.lin.chapter3.po.User">
+        INSERT INTO t_user(user_name, cnname, birthday,sex, mobile, email, note)
+                VALUES (#{userName}, #{cnname}, #{birthday},
+                #{sex, typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
+                #{email}, #{mobile}, #{note})
+    </insert>
+</mapper>

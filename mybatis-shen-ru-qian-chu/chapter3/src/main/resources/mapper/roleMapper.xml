@@ -8,8 +8,10 @@
         <!-- 标示哪些参数或结果类型去用TypeHandler进行转换 -->
         <!-- 配置jdbcType和javaType -->
         <id column="id" property="id" javaType="long" jdbcType="BIGINT" />
+        <!-- jdbcType、javaType和我们定义在config配置里面的TypeHandler是一致的，-->
+        <!-- MyBatis能够知道用我们自定义的类型转化器进行转换 -->
         <result column="role_name" property="roleName" javaType="string" jdbcType="VARCHAR" />
-        <!-- 直接使用typeHandler属性指定 -->
+        <!-- 也可以直接直接使用typeHandler属性指定 -->
         <result column="note" property="note"
                 typeHandler="com.lin.chapter3.typehandler.MyStringTypeHandler" />
     </resultMap>

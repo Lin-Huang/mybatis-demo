@@ -19,8 +19,8 @@
         <!-- 定义枚举类型处理器 -->
         <!-- 使用整数下标作为参数传递 -->
         <!-- 插入的是枚举定义的下标，而取出也是根据下标进行转化 -->
-        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
-                     javaType="com.lin.chapter3.enums.Sex" />
+        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                     javaType="com.lin.chapter3.enums.Sex" />-->
     </typeHandlers>
 
     <!--定义数据库信息，默认使用development数据库构建环境-->
@@ -32,7 +32,7 @@
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver" />
                 <property name="url" value="jdbc:mysql://host:3306/test_mybatis" />
-                <property name="username" value="username" />
+                <property name="username" value="linhuang" />
                 <property name="password" value="password" />
             </dataSource>
         </environment>

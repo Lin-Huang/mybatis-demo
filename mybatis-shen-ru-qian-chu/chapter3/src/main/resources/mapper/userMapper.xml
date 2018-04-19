@@ -9,22 +9,30 @@
         <result column="cnname" property="cnname" />
         <result column="birthday" property="birthday" />
         <!-- 使用枚举类型转换器 -->
+        <!-- 如果在cofig文件配置TypeHandler则无需手动指定typeHandler, -->
+        <!-- Mybatis会自动根据javaType和javaType自动选择 -->
+        <!-- 如果前面没在config文件配置TypeHandler，就需要指定typeHandler -->
         <result column="sex" property="sex"
                 typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
         <result column="email" property="email" />
         <result column="mobile" property="mobile" />
         <result column="note" property="note" />
+        <!-- 使用枚举名称去处理java枚举类型 -->
+        <!-- 通过Enum.name方法将其转换为字符串，通过Enum.valueOf方法将字符串转换为枚举的 -->
+        <result column="state" property="state"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler" />
     </resultMap>
 
     <select id="getUser" parameterType="long" resultMap="userMap">
-        SELECT id, user_name, cnname, birthday, sex, email, mobile, note
+        SELECT id, user_name, cnname, birthday, sex, email, mobile, note, state
         FROM t_user WHERE id = #{id}
     </select>
 
     <insert id="insertUser" parameterType="com.lin.chapter3.po.User">
-        INSERT INTO t_user(user_name, cnname, birthday,sex, mobile, email, note)
+        INSERT INTO t_user(user_name, cnname, birthday,sex, mobile, email, note, state)
                 VALUES (#{userName}, #{cnname}, #{birthday},
                 #{sex, typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
-                #{email}, #{mobile}, #{note})
+                #{email}, #{mobile}, #{note},
+                #{state, typeHandler=org.apache.ibatis.type.EnumTypeHandler})
     </insert>
 </mapper>

@@ -1,6 +1,7 @@
 package com.lin.chapter3.po;
 
 import com.lin.chapter3.enums.Sex;
+import com.lin.chapter3.enums.State;
 
 import java.util.Date;
 
@@ -13,6 +14,15 @@ public class User {
     private String email;
     private String note;
     private Date birthday;
+    private State state;
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
 
     public Long getId() {
         return id;

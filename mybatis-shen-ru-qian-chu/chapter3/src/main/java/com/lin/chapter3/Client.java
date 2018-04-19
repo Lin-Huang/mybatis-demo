@@ -1,6 +1,7 @@
 package com.lin.chapter3;
 
 import com.lin.chapter3.enums.Sex;
+import com.lin.chapter3.enums.State;
 import com.lin.chapter3.mapper.RoleMapper;
 import com.lin.chapter3.mapper.UserMapper;
 import com.lin.chapter3.po.Role;
@@ -28,6 +29,7 @@ public class Client {
             user.setEmail("zhangsan@163.com");
             user.setNote("test EnumOrdinalTypeHandler");
             user.setBirthday(new Date());
+            user.setState(State.FAILURE);
             userMapper.insertUser(user);
             User user1 = userMapper.getUser(1L);
             System.err.println(user1.getSex());

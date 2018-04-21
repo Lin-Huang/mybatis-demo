@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.chapter4.mapper.RoleMapper">
+    <select id="getRole" parameterType="long" resultType="com.lin.chapter4.po.Role">
+        SELECT id,role_name, note FROM t_role WHERE id = #{id}
+    </select>
+
+    <!-- 使用注解方式传递参数 -->
+    <select id="findRoleByAnnotation" resultType="com.lin.chapter4.po.Role">
+        SELECT id, role_name, note FROM t_role
+        WHERE role_name LIKE concat('%', #{roleName}, '%')
+        AND note LIKE concat('%', #{note}, '%');
+    </select>
+
+    <!-- 使用JavaBean传递参数 -->
+    <select id="findRoleByParams" parameterType="com.lin.chapter4.param.RoleParam"
+            resultType="com.lin.chapter4.po.Role">
+        SELECT id, role_name, note FROM t_role
+        WHERE role_name LIKE concat('%', #{roleName}, '%')
+              AND note LIKE concat('%', #{note}, '%');
+    </select>
+</mapper>

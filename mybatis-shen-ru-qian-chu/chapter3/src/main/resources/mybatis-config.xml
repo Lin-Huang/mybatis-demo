@@ -37,6 +37,16 @@
             </dataSource>
         </environment>
     </environments>
+
+    <!-- 配置自定义的数据库厂商标识 -->
+    <!--<databaseIdProvider type="com.lin.chapter3.databaseid.MyDataBaseIdProvider">
+        <property name="SQL Server" value="sqlserver" />
+        <property name="MySQL" value="mysql" />
+        <property name="DB2" value="db2" />
+        <property name="Oracle" value="oracle" />
+    </databaseIdProvider>-->
+
+    <!-- 通过文件路径引入映射器 -->
     <mappers>
         <mapper resource="mapper/roleMapper.xml" />
         <mapper resource="mapper/userMapper.xml" />

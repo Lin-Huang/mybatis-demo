@@ -3,8 +3,26 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lin.chapter4.mapper.RoleMapper">
+    <!-- sql元素，我们可以定义一串SQL语句的组成部分，其他的语句可以用过引用来使用它 -->
+    <sql id="role_columns">
+        id, role_name, note
+    </sql>
+
+    <!-- 还可以指定参数 -->
+    <!--<sql id="role_columns">
+        #{prefix}.role_no, #{prefix}.role_name, #{prefix}.note
+    </sql>
+
     <select id="getRole" parameterType="long" resultType="com.lin.chapter4.po.Role">
-        SELECT id,role_name, note FROM t_role WHERE id = #{id}
+        SELECT
+          <include refid="role_columns">
+              <property name="prefix" value="r" />
+          </include>
+        FROM t_role r WHERE id = #{id}
+    </select>-->
+
+    <select id="getRole" parameterType="long" resultType="com.lin.chapter4.po.Role">
+        SELECT <include refid="role_columns"/> FROM t_role WHERE id = #{id}
     </select>
 
     <!-- 使用注解方式传递参数 -->
@@ -21,4 +39,25 @@
         WHERE role_name LIKE concat('%', #{roleName}, '%')
               AND note LIKE concat('%', #{note}, '%');
     </select>
+
+    <!-- 主键回填 -->
+    <!-- useGeneratedKeys这会令Mybatis使用JDBC的getGeneratedKeys方法来取出由数据库内部生成的主键， -->
+    <!-- 使用它就必须给keyProperty或者keyColumn赋值 -->
+    <!-- 我们可以使用keyProperty属性指定哪个是主键字段,-->
+    <!-- 同时使用useGeneratedKeys属性告诉Mybatis这个主键是否使用库内置策略生成 -->
+    <!-- id列为自增长字段， 在Mybatis插入的时候，它会回填JavaBean的id值-->
+    <insert id="insertRole" parameterType="role" useGeneratedKeys="true"
+        keyProperty="id">
+        INSERT INTO t_role (role_name, note) VALUES (#{roleName}, #{note})
+    </insert>
+
+    <!-- 自定义主键id，可以使用SelectKey元素进行处理 -->
+    <!-- 不过需要取消id自增的规则 -->
+    <insert id="insertRoleSelectKey" parameterType="role" useGeneratedKeys="true"
+            keyProperty="id">
+        <selectKey keyProperty="id" resultType="int" order="BEFORE">
+            SELECT if(max(id) IS NULL , 1, max(id) + 2) as newId FROM t_role
+        </selectKey>
+        INSERT INTO t_role (role_name, note) VALUES (#{roleName}, #{note})
+    </insert>
 </mapper>

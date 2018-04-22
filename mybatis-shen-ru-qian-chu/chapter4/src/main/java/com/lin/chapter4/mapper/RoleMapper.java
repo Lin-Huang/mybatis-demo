@@ -26,4 +26,8 @@ public interface RoleMapper {
      *当参数个数多于5个时，建议使用JavaBean方式
      */
     List<Role> findRoleByParams(RoleParam param);
+
+    void insertRole(Role role);
+
+    void insertRoleSelectKey(Role role);
 }

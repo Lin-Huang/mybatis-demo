@@ -11,7 +11,8 @@ import java.util.List;
 
 public class Client {
     public static void main(String[] args) {
-        testAutoMapper();
+        //testAutoMapper();
+        testAutoId();
     }
 
     private static void testAutoMapper() {
@@ -28,6 +29,29 @@ public class Client {
             RoleParam roleParam = new RoleParam("test", "test");
             List<Role> roleByParams = mapper.findRoleByParams(roleParam);
             System.err.println(JSON.toJSON(roleByParams));
+            sqlSession.commit();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            if (sqlSession != null)
+                sqlSession.rollback();
+        } finally {
+            // 每次创建的SqlSession都必须及时关闭它
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+    }
+
+    private static void testAutoId() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = SqlSessionFactoryUtil.openSqlSession();
+            RoleMapper mapper = sqlSession.getMapper(RoleMapper.class);
+            Role role = new Role();
+            role.setNote("托尔斯泰");
+            role.setRoleName("孤独鳏寡");
+            mapper.insertRole(role);
+            System.err.println(JSON.toJSON(role));
             sqlSession.commit();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

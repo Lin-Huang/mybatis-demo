@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 学生和学生证是一对一关系 -->
+<mapper namespace="com.lin.chapter4.mapper.StudentMapper">
+    <resultMap id="studentMap" type="com.lin.chapter4.po.StudentBean">
+        <id property="id" column="id" />
+        <result property="cnname" column="ccname" />
+        <result property="sex" column="sex" jdbcType="INTEGER"
+                javaType="com.lin.chapter4.enums.Sex"
+                typeHandler="com.lin.chapter4.typehandler.SexEnumTypeHandler"/>
+
+        <!-- select元素由指定的SQL去查询，而column则是指定传递给select语句的参数。 -->
+        <!-- 这里是StudentBean对象的id -->
+        <association property="studentSelfcard" column="id"
+                     select="com.lin.chapter4.mapper.StudentSelfcardMapper.findStudentSelfcardByStudentId" />
+    </resultMap>
+
+    <!-- 先查出Student的信息，然后根据其id查询学生证的信息 -->
+    <select id="getStudent" parameterType="long" resultMap="studentMap">
+        SELECT id, cnname, sex, note FROM t_student WHERE id = #{id}
+    </select>
+</mapper>

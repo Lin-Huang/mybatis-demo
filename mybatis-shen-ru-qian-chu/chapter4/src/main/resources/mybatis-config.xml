@@ -5,6 +5,8 @@
 <configuration>
     <settings>
         <setting name="logImpl" value="SLF4J"/>
+        <!-- 默认自动映射 -->
+        <setting name="autoMappingBehavior" value="PAPTIAL" />
         <!-- 下划线与驼峰式命名规则的自动映射 -->
         <setting name="mapUnderscoreToCamelCase" value="true" />
     </settings>
@@ -32,5 +34,7 @@
     <!-- 通过文件路径引入映射器 -->
     <mappers>
         <mapper resource="mapper/roleMapper.xml" />
+        <mapper resource="mapper/studentMapper.xml" />
+        <mapper resource="mapper/studentSelfcardMapper.xml" />
     </mappers>
 </configuration>

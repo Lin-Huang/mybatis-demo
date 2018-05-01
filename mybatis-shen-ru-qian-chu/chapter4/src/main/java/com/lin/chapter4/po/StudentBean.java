@@ -2,13 +2,31 @@ package com.lin.chapter4.po;
 
 import com.lin.chapter4.enums.Sex;
 
-public class StudentBean {
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * 学生Bean
+ * 一个学生可能有多门课程，在学生确定的前提下每一门课程都有自己的分数，
+ * 所以每一个学生的课程成绩只能对应一门课程
+ */
+public class StudentBean implements Serializable{
     private Long id;
     private String cnname;
     private Sex sex;
     private String note;
     // 级联，一对一关系
     private StudentSelfcardBean studentSelfcard;
+    // 学生与学生课程成绩是一对多的关系
+    private List<StudentLectureBean> studentLectureList;
+
+    public List<StudentLectureBean> getStudentLectureList() {
+        return studentLectureList;
+    }
+
+    public void setStudentLectureList(List<StudentLectureBean> studentLectureList) {
+        this.studentLectureList = studentLectureList;
+    }
 
     public Long getId() {
         return id;

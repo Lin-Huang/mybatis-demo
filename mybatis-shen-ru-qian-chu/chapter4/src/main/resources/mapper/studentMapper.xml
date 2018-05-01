@@ -4,6 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 学生和学生证是一对一关系 -->
 <mapper namespace="com.lin.chapter4.mapper.StudentMapper">
+    <!-- 开启二级缓存 -->
+    <!-- 当我们使用二级缓存的时候，sqlSession调用了commit方法后才会生效 -->
+    <!-- eviction:缓存回收策略，flushInterval：刷新间隔时间（毫秒），默认SQL被执行的时候才会去刷新缓存 -->
+    <!-- size：引用数目，readOnly：只读 -->
+    <cache eviction="LRU" flushInterval="1000000" size="1024" readOnly="true"/>
+
     <resultMap id="studentMap" type="com.lin.chapter4.po.StudentBean">
         <id property="id" column="id" />
         <result property="cnname" column="ccname" />
@@ -11,10 +17,46 @@
                 javaType="com.lin.chapter4.enums.Sex"
                 typeHandler="com.lin.chapter4.typehandler.SexEnumTypeHandler"/>
 
+        <!-- 一对一关系，一个学生对应一个学生证 -->
         <!-- select元素由指定的SQL去查询，而column则是指定传递给select语句的参数。 -->
         <!-- 这里是StudentBean对象的id -->
+        <!-- 局部延迟加载 -->
         <association property="studentSelfcard" column="id"
-                     select="com.lin.chapter4.mapper.StudentSelfcardMapper.findStudentSelfcardByStudentId" />
+                     select="com.lin.chapter4.mapper.StudentSelfcardMapper.findStudentSelfcardByStudentId"
+                     fetchType="lazy"/>
+
+        <!-- 一对多关系, 一个学生对应多个课程成绩 -->
+        <!-- 关联StudentLectureBean，其中Column对应SQL的列名,这里用的是id -->
+        <!-- 属性是Student的StudentLectureList -->
+        <!-- 即时加载 -->
+        <collection property="studentLectureList" column="id"
+                    select="com.lin.chapter4.mapper.StudentLectureMapper.findStudentLectureByStuId"
+                    fetchType="eager"/>
+
+        <!-- 鉴别器级联是在特定的条件下去使用不同的POJO -->
+        <!-- 我们找学生的信息就要根据StudentBean的属性sex -->
+        <!-- 来确定是使用男学生（MaleStudentBean）还是女学生（FemaleStudentBean）的对象了 -->
+        <discriminator javaType="int" column="sex">
+            <!-- 当Student表中sex=1时，使用MaleStudentBean去匹配结果，-->
+            <!-- 然后使用maleStudentMap中配置的collection去获取对应的男学生的健康指标 -->
+            <case value="1" resultMap="maleStudentMap" />
+            <!-- 当Student表中sex=2时，使用FemaleStudentBean去匹配结果，-->
+            <!-- 然后使用femaleStudentMap中配置的collection去获取对应的女学生的健康指标 -->
+            <case value="2" resultMap="femaleStudentMap" />
+        </discriminator>
+    </resultMap>
+
+    <!-- resultMap也可以继承，再加入自己的属性 -->
+    <resultMap id="maleStudentMap" type="MaleStudentBean" extends="studentMap">
+        <collection property="studentHealthMaleBeanList"
+                    select="com.lin.chapter4.mapper.StudentHealthMaleMapper.findStudentHealthMaleByStuId"
+                    column="id" />
+    </resultMap>
+
+    <resultMap id="femaleStudentMap" type="FemaleStudentBean" extends="studentMap">
+        <collection property="studentHealthFemaleBeanList"
+                    select="com.lin.chapter4.mapper.StudentHealthFemaleMapper.findStudentHealthFemaleByStuId"
+                    column="id" />
     </resultMap>
 
     <!-- 先查出Student的信息，然后根据其id查询学生证的信息 -->

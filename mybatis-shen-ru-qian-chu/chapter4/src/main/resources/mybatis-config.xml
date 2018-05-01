@@ -6,9 +6,11 @@
     <settings>
         <setting name="logImpl" value="SLF4J"/>
         <!-- 默认自动映射 -->
-        <setting name="autoMappingBehavior" value="PAPTIAL" />
+        <setting name="autoMappingBehavior" value="PARTIAL" />
         <!-- 下划线与驼峰式命名规则的自动映射 -->
         <setting name="mapUnderscoreToCamelCase" value="true" />
+        <!-- 延迟加载 -->
+        <setting name="lazyLoadingEnabled" value="true" />
     </settings>
 
     <!-- 扫描包，注册别名 -->
@@ -36,5 +38,9 @@
         <mapper resource="mapper/roleMapper.xml" />
         <mapper resource="mapper/studentMapper.xml" />
         <mapper resource="mapper/studentSelfcardMapper.xml" />
+        <mapper resource="mapper/lectureMapper.xml" />
+        <mapper resource="mapper/studentLectureMapper.xml" />
+        <mapper resource="mapper/studentHealthFemaleMapper.xml" />
+        <mapper resource="mapper/studentHealthMaleMapper.xml" />
     </mappers>
 </configuration>

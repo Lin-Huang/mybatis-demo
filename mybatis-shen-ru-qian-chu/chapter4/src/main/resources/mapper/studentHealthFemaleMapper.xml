@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.chapter4.mapper.StudentHealthFemaleMapper">
+    <select id="findStudentHealthFemaleByStuId" parameterType="int"
+            resultType="com.lin.chapter4.po.StudentHealthFemaleBean">
+        SELECT id, student_id, check_date, heart, liver, spleen, lung, kidney, uterus, note
+        FROM t_student_health_female WHERE student_id = #{studentId}
+    </select>
+</mapper>

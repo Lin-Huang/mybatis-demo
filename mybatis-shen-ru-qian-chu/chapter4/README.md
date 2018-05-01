@@ -27,8 +27,19 @@ keyProperty
 
 ## 级联
 **mapper/studentMapper.xml**
-**mapper/studentSelfcardMapper.xml**
 
 - association 一对一关系
 - collection 一对多关系
 - discriminator 鉴别器
+
+## 延迟加载
+**mapper/studentMapper.xml**
+
+- lazyLoadingEnabled
+- 局部延迟加载和即时加载
+
+## 缓存
+**mapper/studentMapper.xml**
+
+- 一级缓存
+- 二级缓存

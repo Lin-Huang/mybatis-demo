@@ -2,6 +2,9 @@ package com.lin.chapter4.po;
 
 import java.util.Date;
 
+/**
+ * 学生证Bean
+ */
 public class StudentSelfcardBean {
     private Long id;
     private Long studentId;

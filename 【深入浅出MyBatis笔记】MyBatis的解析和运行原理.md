@@ -7,41 +7,31 @@ SqlSessionFactory提供创建MyBatis的核心接口SqlSession。MyBatis采用构
 
 SqlSessionFactoryBuilder的源码：
 ```java
-public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
-    try {
-      XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
-      // XMLConfigBuilder解析配置的XML文件，构建Configuration
-      return build(parser.parse());
-    } catch (Exception e) {
-      throw ExceptionFactory.wrapException("Error building SqlSession.", e);
-    } finally {
-      ErrorContext.instance().reset();
+public class SqlSessionFactoryBuilder {
+  .....
+  public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
       try {
-        inputStream.close();
-      } catch (IOException e) {
-        // Intentionally ignore. Prefer previous error.
+        XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
+        // XMLConfigBuilder解析配置的XML文件，构建Configuration
+        return build(parser.parse());
+      } catch (Exception e) {
+        throw ExceptionFactory.wrapException("Error building SqlSession.", e);
+      } finally {
+        ErrorContext.instance().reset();
+        try {
+          inputStream.close();
+        } catch (IOException e) {
+          // Intentionally ignore. Prefer previous error.
+        }
       }
-    }
-}
-
-// 使用Configuration对象去创建SqlSessionFactory
-public SqlSessionFactory build(Configuration config) {
-    // SqlSessionFactory是一个接口，为此MyBatis提供了一个默认实现类
-    return new DefaultSqlSessionFactory(config);
-}
-```
-XMLConfigBuilder的源码：
-```java
-public Configuration parse() {
-    if (parsed) {
-      throw new BuilderException("Each XMLConfigBuilder can only be used once.");
-    }
-    parsed = true;
-    // 解析配置文件，设置Configuration
-    parseConfiguration(parser.evalNode("/configuration"));
-    return configuration;
   }
 
+  // 使用Configuration对象去创建SqlSessionFactory
+  public SqlSessionFactory build(Configuration config) {
+      // SqlSessionFactory是一个接口，为此MyBatis提供了一个默认实现类
+      return new DefaultSqlSessionFactory(config);
+  }
+}
 ```
 
 ### 构建Configuration
@@ -56,6 +46,47 @@ public Configuration parse() {
 - environment环境
 - DatabaseIdProvider数据库标识
 - Mapper映射器
+
+XMLConfigBuilder的源码：
+```java
+public class XMLConfigBuilder extends BaseBuilder {
+  ...
+  public Configuration parse() {
+      if (parsed) {
+        throw new BuilderException("Each XMLConfigBuilder can only be used once.");
+      }
+      parsed = true;
+      // 解析配置文件，设置Configuration
+      parseConfiguration(parser.evalNode("/configuration"));
+      return configuration;
+    }
+
+  private void parseConfiguration(XNode root) {
+    // 读出MyBatis配置文件中的configuration下的各个子标签元素
+    // 把全部信息保存到Configuration类的单例中
+    try {
+      //issue #117 read properties first
+      propertiesElement(root.evalNode("properties"));
+      Properties settings = settingsAsProperties(root.evalNode("settings"));
+      loadCustomVfs(settings);
+      typeAliasesElement(root.evalNode("typeAliases"));
+      pluginElement(root.evalNode("plugins"));
+      objectFactoryElement(root.evalNode("objectFactory"));
+      objectWrapperFactoryElement(root.evalNode("objectWrapperFactory"));
+      reflectorFactoryElement(root.evalNode("reflectorFactory"));
+      settingsElement(settings);
+      // read it after objectFactory and objectWrapperFactory issue #631
+      environmentsElement(root.evalNode("environments"));
+      databaseIdProviderElement(root.evalNode("databaseIdProvider"));
+      typeHandlerElement(root.evalNode("typeHandlers"));
+      // 设置mapper映射器
+      mapperElement(root.evalNode("mappers"));
+    } catch (Exception e) {
+      throw new BuilderException("Error parsing SQL Mapper Configuration. Cause: " + e, e);
+    }
+  }
+}
+```
 
 ## SqlSession运行过程
 ### 映射器的动态代理

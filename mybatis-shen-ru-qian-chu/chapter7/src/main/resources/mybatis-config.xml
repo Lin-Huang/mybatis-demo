@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="logImpl" value="SLF4J"/>
+    </settings>
+    
+    <!--定义别名-->
+    <typeAliases>
+        <typeAlias type="com.lin.chapter7.po.Role" alias="role" />
+    </typeAliases>
+
+    <!-- 定义TypeHandler类型处理器 -->
+    <typeHandlers>
+        <typeHandler handler="com.lin.chapter7.typehandler.MyStringTypeHandler"
+                     javaType="string" jdbcType="VARCHAR" />
+        <!-- 定义枚举类型处理器 -->
+        <!-- 使用整数下标作为参数传递 -->
+        <!-- 插入的是枚举定义的下标，而取出也是根据下标进行转化 -->
+        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                     javaType="com.lin.chapter7.enums.Sex" />-->
+    </typeHandlers>
+
+    <!--定义数据库信息，默认使用development数据库构建环境-->
+    <environments default="development">
+        <environment id="development">
+            <!--采用jdbc事务-->
+            <transactionManager type="JDBC"/>
+            <!-- 配置数据链接信息 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://host:3306/test_mybatis" />
+                <property name="username" value="linhuang" />
+                <property name="password" value="password" />
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 配置自定义的数据库厂商标识 -->
+    <!--<databaseIdProvider type="com.lin.chapter7.databaseid.MyDataBaseIdProvider">
+        <property name="SQL Server" value="sqlserver" />
+        <property name="MySQL" value="mysql" />
+        <property name="DB2" value="db2" />
+        <property name="Oracle" value="oracle" />
+    </databaseIdProvider>-->
+
+    <!-- 通过文件路径引入映射器 -->
+    <mappers>
+        <mapper resource="mapper/roleMapper.xml" />
+        <mapper resource="mapper/userMapper.xml" />
+    </mappers>
+</configuration>

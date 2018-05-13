@@ -6,6 +6,8 @@
     <settings>
         <setting name="logImpl" value="SLF4J"/>
     </settings>
+
+
     
     <!--定义别名-->
     <typeAliases>
@@ -23,6 +25,17 @@
                      javaType="com.lin.chapter7.enums.Sex" />-->
     </typeHandlers>
 
+    <!-- 配置插件 -->
+    <plugins>
+        <plugin interceptor="com.lin.chapter7.interceptor.MyPlugin">
+            <property name="dbType" value="mysql" />
+        </plugin>
+        <plugin interceptor="com.lin.chapter7.interceptor.QueryLimitPlugin">
+            <property name="limit" value="100" />
+            <property name="dbtype" value="mysql" />
+        </plugin>
+    </plugins>
+
     <!--定义数据库信息，默认使用development数据库构建环境-->
     <environments default="development">
         <environment id="development">
@@ -37,14 +50,6 @@
             </dataSource>
         </environment>
     </environments>
-
-    <!-- 配置自定义的数据库厂商标识 -->
-    <!--<databaseIdProvider type="com.lin.chapter7.databaseid.MyDataBaseIdProvider">
-        <property name="SQL Server" value="sqlserver" />
-        <property name="MySQL" value="mysql" />
-        <property name="DB2" value="db2" />
-        <property name="Oracle" value="oracle" />
-    </databaseIdProvider>-->
 
     <!-- 通过文件路径引入映射器 -->
     <mappers>

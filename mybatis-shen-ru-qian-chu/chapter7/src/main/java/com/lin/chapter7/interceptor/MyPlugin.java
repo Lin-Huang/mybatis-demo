@@ -6,6 +6,11 @@ import org.apache.ibatis.plugin.*;
 import java.sql.Connection;
 import java.util.Properties;
 
+/**
+ * 其中@Intercepts说明它是一个拦截器。@Signature是注册拦截器签名的地方，只有签名满足条件才能拦截，
+ * type可以是四大对象中的一个，这里是StatementHandler。
+ * method代表要拦截四大对象的某一接口方法，而args则表示该方法的参数
+ */
 @Intercepts({@Signature(
         type = StatementHandler.class, //确定要拦截的对象
         method = "prepare",  // 确定要拦截的方法

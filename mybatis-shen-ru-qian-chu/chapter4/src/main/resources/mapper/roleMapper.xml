@@ -13,7 +13,7 @@
         #{prefix}.role_no, #{prefix}.role_name, #{prefix}.note
     </sql>
 
-    <select id="getRole" parameterType="long" resultType="com.lin.chapter4.po.Role">
+    <select id="getRole" parameterType="long" resultType="com.lin.chapter4.entity.Role">
         SELECT
           <include refid="role_columns">
               <property name="prefix" value="r" />

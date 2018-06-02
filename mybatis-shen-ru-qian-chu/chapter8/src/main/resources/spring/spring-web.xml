@@ -19,7 +19,12 @@
         (1)自动注册DefaultAnootationHandlerMapping,AnotationMethodHandlerAdapter
         (2)提供一些列：数据绑定，数字和日期的format @NumberFormat, @DateTimeFormat, xml,json默认读写支持
     -->
-    <mvc:annotation-driven />
+    <mvc:annotation-driven >
+        <!-- 配置HttpMessageConvetor -->
+        <mvc:message-converters>
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" />
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <!-- 2.静态资源默认servlet配置
 		(1)加入对静态资源的处理：js,gif,png
@@ -34,23 +39,4 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <!-- Spring视图拦截器 -->
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-        <property name="messageConverters">
-            <list>
-                <!-- JSON视图拦截器，读取@ResponseBody的时候触发它 -->
-                <ref bean="jackson2HttpMessageConverter" />
-            </list>
-        </property>
-    </bean>
-
-    <!-- json转化器，它可以将结果转化 -->
-    <bean id="jackson2HttpMessageConverter"
-            class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-        <property name="supportedMediaTypes">
-            <list>
-                <value>application/json;charset=UTF-8</value>
-            </list>
-        </property>
-    </bean>
 </beans>

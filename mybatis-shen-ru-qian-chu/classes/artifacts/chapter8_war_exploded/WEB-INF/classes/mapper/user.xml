@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.dao.UserDao">
+    <insert id="insertUser" parameterType="userBean">
+        INSERT INTO t_user (user_name, cnname, sex, mobile, email, note, birthday, state)
+                VALUES (#{userName}, #{cnname},  #{sex}, #{mobile}, #{email}, #{note}, #{birthday}, #{state})
+    </insert>
+
+    <select id="findUsers" parameterType="string" resultType="userBean">
+        SELECT id, user_name, cnname, state, birthday, sex, mobile, email, note FROM t_user
+        <where>
+            <if test="userName != null">
+                user_name like concat('%', #{userName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getUser" parameterType="int" resultType="userBean">
+        SELECT id, user_name, cnname, state, birthday, sex, mobile, email, note FROM t_user
+        WHERE id = #{id}
+    </select>
+
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM  t_user WHERE id = #{id}
+    </delete>
+
+    <update id="updateUser">
+        UPDATE t_user
+        <set>
+            <if test="userName != null">user_name = #{uesrName}, </if>
+            <if test="birthday != null">birthday = #{birthday}, </if>
+            <if test="sex != null">sex = #{sex}, </if>
+            <if test="mobile != null">mobile = #{mobile}</if>
+            <if test="email != null">email = #{email}</if>
+            <if test="note != null">note = #{note}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>

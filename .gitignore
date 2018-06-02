@@ -32,3 +32,4 @@ hs_err_pid*
 
 .mvn
 target
+mybatis-shen-ru-qian-chu/chapter8/src/main/resources/jdbc\.properties
